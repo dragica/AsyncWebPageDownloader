@@ -25,10 +25,10 @@ namespace AsyncWebPageDownloader
 
         public async Task Run()
         {
-            await DownloadWebPagesAsync(_logger);
+            await DownloadWebPagesAsync();
         }
 
-        private async Task DownloadWebPagesAsync(ILogger<App> logger)
+        private async Task DownloadWebPagesAsync()
         {
             var tasks = new List<Task>();
             var semaphore = new SemaphoreSlim(_configuration.MaxConcurrentDownloads);
@@ -58,6 +58,7 @@ namespace AsyncWebPageDownloader
             await Task.WhenAll(tasks);
             stopwatch.Stop();
             _logger.LogInformation($"Downloads completed in {stopwatch.ElapsedMilliseconds} ms.");
+            await Task.Delay(500); // give logger time to flush
         }
     }
 }
