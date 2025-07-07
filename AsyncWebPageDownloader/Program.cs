@@ -17,7 +17,6 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IDownloadConfiguration, DownloadConfiguration>();
         services.AddSingleton<IWebPageDownloadService, WebPageDownloadService>();
         services.AddSingleton<IFileStorageService, FileStorageService>();
-
         services.AddLogging(configure => configure.AddDebug().AddConsole());
         services.AddSingleton<App>();
     })

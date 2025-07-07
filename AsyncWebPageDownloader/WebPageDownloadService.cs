@@ -31,12 +31,14 @@ namespace AsyncWebPageDownloader
             if (!response.IsSuccessStatusCode)
             {
                 _logger.LogError($"Failed to download {url}. Status code: {response.StatusCode}");
+                return;
             }
 
             var mediaType = response.Content.Headers.ContentType?.MediaType;
             if (mediaType != "text/html")
             {
                 _logger.LogWarning($"Unexpected content type: {mediaType} for url {url}.");
+                return;
             }
 
             await using var contentStream = await response.Content.ReadAsStreamAsync();
