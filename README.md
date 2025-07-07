@@ -16,7 +16,7 @@ AsyncWebPageDownloader is a .NET 8 console application for efficiently downloadi
 
 ### Installing
 
-Open the project in Visual Studio, open a new terminal and type the following commands:
+Open the solution in Visual Studio, open a new terminal and type the following commands:
 
 ```
 dotnet restore

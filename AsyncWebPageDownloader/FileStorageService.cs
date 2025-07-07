@@ -3,10 +3,10 @@ using Microsoft.Extensions.Logging;
 
 namespace AsyncWebPageDownloader
 {
-    public class FileService : IFileService
+    public class FileStorageService : IFileStorageService
     {
-        private readonly ILogger<IFileService> _logger;
-        public FileService(ILogger<IFileService> logger)
+        private readonly ILogger<IFileStorageService> _logger;
+        public FileStorageService(ILogger<IFileStorageService> logger)
         {
             _logger = logger;
         }

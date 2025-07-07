@@ -8,11 +8,11 @@ namespace AsyncWebPageDownloader
         private readonly HttpClient _httpClient;
         private readonly ILogger<IWebPageDownloadService> _logger;
         private readonly IDownloadConfiguration _configuration;
-        private readonly IFileService _streamService;
+        private readonly IFileStorageService _streamService;
 
         public WebPageDownloadService(
             HttpClient httpClient,
-            IFileService fileStreamService,
+            IFileStorageService fileStreamService,
             IDownloadConfiguration configuration,
             ILogger<IWebPageDownloadService> logger)
         {

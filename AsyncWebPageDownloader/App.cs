@@ -6,14 +6,14 @@ namespace AsyncWebPageDownloader
 {
     public class App
     {
-        private readonly IFileService _fileService;
+        private readonly IFileStorageService _fileService;
         private readonly IWebPageDownloadService _downloadService;
         private readonly IDownloadConfiguration _configuration;
         private readonly ILogger<App> _logger;
 
         public App(
             IWebPageDownloadService downloadService,
-            IFileService fileService,
+            IFileStorageService fileService,
             IDownloadConfiguration configuration,
             ILogger<App> logger)
         {
@@ -32,6 +32,8 @@ namespace AsyncWebPageDownloader
         {
             var tasks = new List<Task>();
             var semaphore = new SemaphoreSlim(_configuration.MaxConcurrentDownloads);
+
+            // For smaller datasets, loading all URLs into memory is acceptable.
             var urls = await _fileService.ReadFromFileAsync(_configuration.UrlsFilePath);
 
             var stopwatch = Stopwatch.StartNew();
