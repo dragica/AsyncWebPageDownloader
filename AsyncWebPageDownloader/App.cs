@@ -10,6 +10,7 @@ namespace AsyncWebPageDownloader
         private readonly IWebPageDownloadService _downloadService;
         private readonly IDownloadConfiguration _configuration;
         private readonly ILogger<App> _logger;
+        private readonly SemaphoreSlim _semaphore;
 
         public App(
             IWebPageDownloadService downloadService,
@@ -21,6 +22,8 @@ namespace AsyncWebPageDownloader
             _fileService = fileService;
             _configuration = configuration;
             _logger = logger;
+            _semaphore = new SemaphoreSlim(_configuration.MaxConcurrentDownloads);
+
         }
 
         public async Task Run()
@@ -31,7 +34,6 @@ namespace AsyncWebPageDownloader
         private async Task DownloadWebPagesAsync()
         {
             var tasks = new List<Task>();
-            var semaphore = new SemaphoreSlim(_configuration.MaxConcurrentDownloads);
 
             // For smaller datasets, loading all URLs into memory is acceptable.
             var urls = await _fileService.ReadFromFileAsync(_configuration.UrlsFilePath);
@@ -40,27 +42,31 @@ namespace AsyncWebPageDownloader
 
             foreach (var url in urls)
             {
-                await semaphore.WaitAsync();
+                tasks.Add(DownloadWithSemaphoreAsync(url));
 
-                var task = Task.Run(async () =>
-                {
-                    try
-                    {
-                        await _downloadService.DownloadAsync(url);
-                    }
-                    finally
-                    {
-                        semaphore.Release();
-                    }
-                });
-
-                tasks.Add(task);
             }
 
             await Task.WhenAll(tasks);
             stopwatch.Stop();
             _logger.LogInformation($"Downloads completed in {stopwatch.ElapsedMilliseconds} ms.");
             await Task.Delay(500); // give logger time to flush
+        }
+
+        async Task DownloadWithSemaphoreAsync(string url)
+        {
+            await _semaphore.WaitAsync();
+            try
+            {
+                await _downloadService.DownloadAsync(url);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error downloading URL: {url}");
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
     }
 }

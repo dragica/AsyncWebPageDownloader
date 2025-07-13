@@ -15,7 +15,6 @@ var host = Host.CreateDefaultBuilder(args)
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html"));       
         });
         services.AddSingleton<IDownloadConfiguration, DownloadConfiguration>();
-        services.AddSingleton<IWebPageDownloadService, WebPageDownloadService>();
         services.AddSingleton<IFileStorageService, FileStorageService>();
         services.AddLogging(configure => configure.AddDebug().AddConsole());
         services.AddSingleton<App>();
