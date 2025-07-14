@@ -13,14 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Content\" />
+    <Folder Include="Data\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Content\urls.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\urls.txt">
+    <None Update="Data\urls.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

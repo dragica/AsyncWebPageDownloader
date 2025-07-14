@@ -8,18 +8,18 @@ namespace AsyncWebPageDownloader
         private readonly HttpClient _httpClient;
         private readonly ILogger<IWebPageDownloadService> _logger;
         private readonly IDownloadConfiguration _configuration;
-        private readonly IFileStorageService _streamService;
+        private readonly IFileStorageService _fileStorageService;
 
         public WebPageDownloadService(
             HttpClient httpClient,
-            IFileStorageService fileStreamService,
+            IFileStorageService fileStorageService,
             IDownloadConfiguration configuration,
             ILogger<IWebPageDownloadService> logger)
         {
             _httpClient = httpClient;
             _configuration = configuration;
             _logger = logger;
-            _streamService = fileStreamService;
+            _fileStorageService = fileStorageService;
         }
 
         public async Task DownloadAsync(string url)
@@ -57,7 +57,7 @@ namespace AsyncWebPageDownloader
         private async Task SaveWebPageAsync(string webPageFileName, Stream contentStream)
         {
             var outputFilePath = Path.Combine(_configuration.OutputFolderPath, webPageFileName);
-            await _streamService.WriteToFileAsync(outputFilePath, contentStream);
+            await _fileStorageService.WriteToFileAsync(outputFilePath, contentStream);
         }
     }
 }

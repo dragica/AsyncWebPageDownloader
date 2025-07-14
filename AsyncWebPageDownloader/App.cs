@@ -43,7 +43,6 @@ namespace AsyncWebPageDownloader
             foreach (var url in urls)
             {
                 tasks.Add(DownloadWithSemaphoreAsync(url));
-
             }
 
             await Task.WhenAll(tasks);
